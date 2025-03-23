@@ -1,0 +1,11 @@
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+  .spacer {
+    flex: 1;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
