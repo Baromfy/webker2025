@@ -1,0 +1,17 @@
+.reservation-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.table-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.table-card {
+  width: 200px;
+  padding: 10px;
+  text-align: center;
+}

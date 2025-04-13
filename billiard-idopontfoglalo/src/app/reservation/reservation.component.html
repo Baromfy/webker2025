@@ -1,0 +1,11 @@
+<div class="reservation-container">
+  <h1>Foglalható asztalok</h1>
+  <div class="table-cards">
+    <mat-card *ngFor="let table of billiardTables" class="table-card">
+      <mat-card-title>Asztal {{ table.number }}</mat-card-title>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="reserveTable(table)">Foglalás</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
