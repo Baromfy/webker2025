@@ -11,5 +11,13 @@ import { RouterModule } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  isLoggedIn: boolean = false;
 
+  checkLoginStatus(): void {
+    if (this.isLoggedIn) {
+      console.log('User is logged in');
+    } else {
+      console.log('User is not logged in');
+    }
+  }
 }
