@@ -1,55 +1,73 @@
-import { Component, inject } from '@angular/core';
-import {
-  FormsModule,
-  Validators,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
-
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  standalone:true,
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, MatCardModule,
-     MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, CommonModule],
   templateUrl: './login.component.html',
-  styles: '',
+  imports: [
+    FormsModule, 
+    ReactiveFormsModule, 
+    MatCardModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    CommonModule, 
+    RouterLink, 
+    MatProgressSpinnerModule,
+    MatSnackBarModule
+  ],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  form: FormGroup;
   error: boolean = false;
-  fb: FormBuilder = inject(FormBuilder);
-  authService: AuthService = inject(AuthService);
-  router: Router = inject(Router);
-  form = this.fb.nonNullable.group({
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-      ],
-    ],
-    password: ['', Validators.required],
-  });
+  isLoading: boolean = false;
 
-  onSubmit(): void {
-    const rawForm = this.form.getRawValue();
-    this.authService.login(rawForm.email, rawForm.password).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/protected-content');
-      },
-      error: (error) => {
-        this.error = true;
-        console.error('Email/Password Sign-In error:', error);
-      },
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+      password: ['', [Validators.required]]
     });
   }
 
+  onSubmit() {
+    if (this.form.valid) {
+      this.isLoading = true;
+      this.error = false;
+      
+      const { email, password } = this.form.value;
+      
+      this.authService.login(email, password)
+        .subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.snackBar.open('Sikeres bejelentkezés!', 'Bezár', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            this.router.navigate(['/profile']);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.error = true;
+          }
+        });
+    }
+  }
 }

@@ -1,11 +1,134 @@
 <div class="reservation-container">
-  <h1>Foglalható asztalok</h1>
-  <div class="table-cards">
-    <mat-card *ngFor="let table of billiardTables" class="table-card">
-      <mat-card-title>Asztal {{ table.number }}</mat-card-title>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="reserveTable(table)">Foglalás</button>
-      </mat-card-actions>
-    </mat-card>
+
+  <div class="page-header">
+    <h1>Időpontfoglalás</h1>
+    <p>Válaszd ki az asztalt és az időpontot a foglaláshoz</p>
   </div>
+
+
+  <section class="tables-section">
+    <div class="section-header">
+      <h2>Válassz asztalt</h2>
+      <mat-divider></mat-divider>
+    </div>
+    
+    <mat-grid-list [cols]="cols" rowHeight="1:1.2" gutterSize="16">
+      <mat-grid-tile *ngFor="let table of billiardTables">
+        <app-table-card
+          [table]="table"
+          [tableType]="getTableType(table)"
+          [isAvailable]="isTableAvailable(table)"
+          [isSelected]="selectedTable?.id === table.id"
+          [currentReservationCount]="0"
+          (selectTable)="onTableSelect($event)"
+          (reserveTable)="onTableReserve($event)"
+          (viewDetails)="onTableDetails($event)">
+        </app-table-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </section>
+
+
+  <section class="form-section" id="reservation-form">
+    <div class="section-header">
+      <h2>Foglalási adatok</h2>
+      <mat-divider></mat-divider>
+    </div>
+    
+    <div class="form-container" *ngIf="selectedTable; else selectTablePrompt">
+      <div class="selected-table-info">
+        <h3>Kiválasztott asztal: {{ selectedTable.number }} szám</h3>
+        <p *ngIf="getTableType(selectedTable)">Típus: {{ getTableType(selectedTable)?.name }}</p>
+        <p *ngIf="getTableType(selectedTable)">Díj: {{ getTableType(selectedTable)?.hourlyRate }} Ft/óra</p>
+      </div>
+      
+      <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nap</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" [min]="today">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="reservationForm.get('date')?.hasError('required')">
+            Válassz dátumot
+          </mat-error>
+        </mat-form-field>
+        
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Időpont</mat-label>
+          <mat-select formControlName="startTime" required>
+            <mat-option *ngFor="let slot of availableTimeSlots" [value]="slot.start">
+              {{ slot.start | timeRange:slot.end }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="reservationForm.get('startTime')?.hasError('required')">
+            Válassz kezdési időpontot
+          </mat-error>
+        </mat-form-field>
+        
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Időtartam (óra)</mat-label>
+          <mat-select formControlName="duration" required>
+            <mat-option [value]="1">1 óra</mat-option>
+            <mat-option [value]="2">2 óra</mat-option>
+            <mat-option [value]="3">3 óra</mat-option>
+            <mat-option [value]="4">4 óra</mat-option>
+            <mat-option [value]="5">5 óra</mat-option>
+          </mat-select>
+          <mat-error *ngIf="reservationForm.get('duration')?.hasError('required')">
+            Válassz időtartamot
+          </mat-error>
+        </mat-form-field>
+        
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Megjegyzés (opcionális)</mat-label>
+          <textarea matInput formControlName="notes" rows="3"></textarea>
+        </mat-form-field>
+        
+
+        <div class="price-summary">
+          <h3>Fizetendő összesen:</h3>
+          <div class="price-amount">{{ calculateTotal() | currency:'HUF':'symbol':'1.0-0' }}</div>
+        </div>
+        
+
+        <div class="form-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="reservationForm.invalid || loading">
+            <mat-icon>check_circle</mat-icon>
+            Foglalás véglegesítése
+          </button>
+          
+          <button 
+            mat-button 
+            type="button" 
+            (click)="selectedTable = null">
+            <mat-icon>cancel</mat-icon>
+            Mégsem
+          </button>
+        </div>
+      </form>
+      
+
+      <div class="loading-overlay" *ngIf="loading">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Foglalás feldolgozása...</p>
+      </div>
+    </div>
+    
+
+    <ng-template #selectTablePrompt>
+      <div class="select-table-prompt">
+        <mat-icon>touch_app</mat-icon>
+        <h3>Először válassz asztalt a fenti listából!</h3>
+        <p>Az időpontfoglaláshoz kattints egy szabad asztalra.</p>
+      </div>
+    </ng-template>
+  </section>
 </div>

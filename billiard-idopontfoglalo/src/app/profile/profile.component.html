@@ -1,0 +1,94 @@
+<div class="profile-container">
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Adatok betöltése...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && (profileData$ | async) as profileData">
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>account_circle</mat-icon>
+          Felhasználói profil
+        </mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content *ngIf="profileData.user">
+        <div class="profile-details">
+          <p><strong>Név:</strong> {{ profileData.user.name }}</p>
+          <p><strong>Email:</strong> {{ profileData.user.email }}</p>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions class="profile-actions">
+        <button mat-raised-button color="primary" [routerLink]="['/reservation']">
+          <mat-icon>add</mat-icon> Új időpontfoglalás
+        </button>
+        <button mat-raised-button color="warn" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon> Kijelentkezés
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="reservations-section">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon matBadge="{{profileData.upcomingReservations.length}}" 
+                      [matBadgeHidden]="profileData.upcomingReservations.length === 0"
+                      matBadgeColor="accent">event</mat-icon>
+            Közelgő foglalások
+          </ng-template>
+          
+          <div class="tab-content">
+            <div *ngIf="profileData.upcomingReservations.length === 0" class="empty-list">
+              <mat-icon>event_busy</mat-icon>
+              <p>Nincs közelgő foglalásod</p>
+              <button mat-raised-button color="primary" [routerLink]="['/reservation']">
+                Időpontfoglalás
+              </button>
+            </div>
+            
+            <mat-list *ngIf="profileData.upcomingReservations.length > 0">
+              <mat-list-item *ngFor="let reservation of profileData.upcomingReservations">
+                <div matListItemTitle>
+                  Asztal #{{ reservation.tableId }} - {{ reservation.startTime | timeRange:reservation.endTime:{showDate:true, showDuration:true} }}
+                </div>
+                <div matListItemMeta>
+                  <button mat-icon-button color="warn" (click)="cancelReservation(reservation.id)" matTooltip="Foglalás lemondása">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+                <mat-divider></mat-divider>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </mat-tab>
+        
+        <!-- Past Reservations Tab -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>history</mat-icon>
+            Korábbi foglalások
+          </ng-template>
+          
+          <div class="tab-content">
+            <div *ngIf="profileData.pastReservations.length === 0" class="empty-list">
+              <mat-icon>history</mat-icon>
+              <p>Nincs korábbi foglalásod</p>
+            </div>
+            
+            <mat-list *ngIf="profileData.pastReservations.length > 0">
+              <mat-list-item *ngFor="let reservation of profileData.pastReservations">
+                <div matListItemTitle>
+                  Asztal #{{ reservation.tableId }} - {{ reservation.startTime | timeRange:reservation.endTime:{showDate:true} }}
+                </div>
+                <mat-divider></mat-divider>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </ng-container>
+</div>

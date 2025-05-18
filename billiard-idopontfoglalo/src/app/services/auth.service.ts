@@ -8,6 +8,7 @@ import {
   signOut,
   user,
   User,
+  UserCredential
 } from '@angular/fire/auth';
 import { createUserWithEmailAndPassword, setPersistence } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
@@ -33,7 +34,6 @@ export class AuthService {
       email,
       password
     ).then(() => {
-      //
     });
     return from(promise);
   }
@@ -45,7 +45,7 @@ export class AuthService {
     return from(promise);
   }
 
-  async register(email: string, password: string, name: string): Promise<void> {
+  async register(email: string, password: string, name: string): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.firebaseAuth,
@@ -53,9 +53,8 @@ export class AuthService {
         password
       );
       
-      console.log('Sikeres regisztráció:', userCredential.user);
+      return userCredential;
     } catch (error) {
-      console.error('Regisztrációs hiba:', error);
       throw error;
     }
   }

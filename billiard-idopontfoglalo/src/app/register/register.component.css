@@ -1,0 +1,214 @@
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  background-size: cover;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.95);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  animation: card-appear 0.5s ease-out;
+}
+
+@keyframes card-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(63, 81, 181, 0.1);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+  z-index: -1;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  background-color: rgba(63, 81, 181, 0.1);
+  border-radius: 50%;
+  transform: translate(-30%, 30%);
+  z-index: -1;
+}
+
+.register-card:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transform: translateY(-5px);
+}
+
+.mat-card-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: #1a237e;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.mat-card-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #3f51b5;
+  border-radius: 3px;
+}
+
+mat-card-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+
+:host ::ng-deep .mat-mdc-form-field-outline {
+  background-color: rgba(237, 241, 247, 0.6);
+  border-radius: 8px;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  border-radius: 8px !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field-icon-suffix {
+  color: #3f51b5;
+}
+
+
+.register-button {
+  margin-top: 24px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  background-color: #3f51b5;
+  color: white;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.3);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.register-button:hover:not(:disabled) {
+  background-color: #303f9f;
+  box-shadow: 0 6px 12px rgba(63, 81, 181, 0.4);
+  transform: translateY(-2px);
+}
+
+.register-button:disabled {
+  background-color: #e0e0e0;
+  color: #9e9e9e;
+  box-shadow: none;
+}
+
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  margin: 16px 0;
+  font-size: 14px;
+  background-color: rgba(244, 67, 54, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #f44336;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+
+mat-spinner {
+  margin: 0 auto;
+}
+
+
+.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #3f51b5;
+  text-decoration: none;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.login-link:hover {
+  background-color: rgba(63, 81, 181, 0.1);
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .register-card {
+    padding: 24px;
+    max-width: 100%;
+  }
+  
+  .mat-card-title {
+    font-size: 24px;
+  }
+  
+  .register-container {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+}

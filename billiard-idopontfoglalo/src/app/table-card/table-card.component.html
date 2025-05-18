@@ -1,0 +1,55 @@
+<mat-card 
+  class="table-card" 
+  [ngClass]="{'available': isAvailable, 'selected': isSelected, 'unavailable': !isAvailable}"
+  (click)="onSelect()"
+  appRipple
+  [appHighlight]="isAvailable ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)'">
+  
+  <div class="card-header">
+    <mat-icon 
+      [matBadge]="currentReservationCount" 
+      [matBadgeHidden]="currentReservationCount === 0"
+      matBadgeColor="accent"
+      matBadgeSize="small"
+      [matTooltip]="currentReservationCount === 1 ? '1 foglalás ma' : currentReservationCount + ' foglalás ma'">
+      {{ getTableIcon() }}
+    </mat-icon>
+    <span class="table-number">{{ table.number }}</span>
+  </div>
+  
+  <mat-card-content>
+    <ng-container *ngIf="tableType">
+      <div class="table-type">{{ tableType.name }}</div>
+      <div class="price" *ngIf="tableType.hourlyRate">{{ tableType.hourlyRate }} Ft/óra</div>
+      <div class="description" *ngIf="tableType.description">{{ tableType.description }}</div>
+    </ng-container>
+    
+    <div class="status-indicator">
+      <mat-icon *ngIf="isAvailable" class="available-icon">check_circle</mat-icon>
+      <mat-icon *ngIf="!isAvailable" class="unavailable-icon">cancel</mat-icon>
+      <span>{{ isAvailable ? 'Szabad' : 'Foglalt' }}</span>
+    </div>
+  </mat-card-content>
+  
+  <mat-card-actions align="end">
+    <button 
+      mat-icon-button 
+      color="primary" 
+      (click)="onViewDetails($event)"
+      [appTooltip]="'Részletek megtekintése - ' + table.number + '. asztal'"
+      tooltipPosition="top">
+      <mat-icon>info</mat-icon>
+    </button>
+    
+    <button 
+      mat-raised-button 
+      color="primary" 
+      [disabled]="!isAvailable"
+      (click)="onReserve($event)"
+      appRipple
+      rippleColor="rgba(255, 255, 255, 0.2)">
+      <mat-icon>event_available</mat-icon>
+      Foglalás
+    </button>
+  </mat-card-actions>
+</mat-card>

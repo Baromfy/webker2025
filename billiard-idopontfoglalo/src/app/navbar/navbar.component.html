@@ -1,6 +1,45 @@
 <mat-toolbar color="primary">
-    <span class="spacer"></span>
-    <a mat-button routerLink="/reservation">Időpontfoglalás</a>
-    <a mat-button routerLink="/login">Bejelentkezés</a>
-    <span class="spacer"></span>
-  </mat-toolbar>
+  <a mat-button routerLink="/" class="brand">
+    <mat-icon>sports_basketball</mat-icon>
+    <span>BiLLIARD</span>
+  </a>
+  
+  <span class="spacer"></span>
+  
+  <!-- Navigációs linkek -->
+  <ng-container *ngIf="(user$ | async); else loggedOut">
+    <!-- Bejelentkezett felhasználó linkek -->
+    <a mat-button routerLink="/reservation">
+      <mat-icon>event_available</mat-icon>
+      <span class="nav-label">Időpontfoglalás</span>
+    </a>
+    
+    <a mat-button routerLink="/dashboard">
+      <mat-icon>dashboard</mat-icon>
+      <span class="nav-label">Foglalásaim</span>
+    </a>
+    
+    <a mat-button routerLink="/profile">
+      <mat-icon>account_circle</mat-icon>
+      <span class="nav-label">Profil</span>
+    </a>
+    
+    <button mat-button (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span class="nav-label">Kijelentkezés</span>
+    </button>
+  </ng-container>
+  
+  <!-- Kijelentkezett felhasználó linkek -->
+  <ng-template #loggedOut>
+    <a mat-button routerLink="/login">
+      <mat-icon>login</mat-icon>
+      <span class="nav-label">Bejelentkezés</span>
+    </a>
+    
+    <a mat-button routerLink="/register">
+      <mat-icon>person_add</mat-icon>
+      <span class="nav-label">Regisztráció</span>
+    </a>
+  </ng-template>
+</mat-toolbar>

@@ -1,0 +1,87 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 20px auto;
+  gap: 20px;
+  padding: 0 15px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.profile-card {
+  width: 100%;
+}
+
+.profile-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.profile-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-details {
+  margin: 16px 0;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 16px 16px !important;
+}
+
+.reservations-section {
+  width: 100%;
+}
+
+.tab-content {
+  padding: 20px 0;
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: #777;
+  text-align: center;
+}
+
+.empty-list mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.empty-list button {
+  margin-top: 16px;
+}
+
+mat-list-item {
+  margin-bottom: 8px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+  .profile-actions {
+    flex-direction: column;
+  }
+  
+  .profile-actions button {
+    width: 100%;
+  }
+}

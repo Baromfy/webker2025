@@ -1,11 +1,43 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 mat-toolbar {
-    display: flex;
-    justify-content: space-between;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-label {
+  margin-left: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-label {
+    display: none;
   }
-  .spacer {
-    flex: 1;
+  
+  .brand span {
+    display: none;
   }
-  a {
-    text-decoration: none;
-    color: white;
+  
+  mat-toolbar {
+    padding: 0 8px;
   }
+}
