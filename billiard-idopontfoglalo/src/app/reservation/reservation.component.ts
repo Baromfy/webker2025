@@ -50,9 +50,8 @@ type Table = BilliardTable | SnookerTable;
     MatDividerModule,
     MatProgressSpinnerModule,
     TableCardComponent,
-    FilterTablePipe,
     TimeRangePipe
-  ],
+],
   templateUrl: './reservation.component.html',
   styleUrls: ['./reservation.component.css']
 })
